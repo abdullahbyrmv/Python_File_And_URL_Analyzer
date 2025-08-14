@@ -146,3 +146,20 @@ class VirusTotal:
             print(f"Failed to get results: {response.status_code}")
             print(f"Response body: {response.text}")
         return None
+
+    # Method for Scanning IP Address
+    def query_ip_address(self, ip_address: str) -> dict:
+        """Query VirusTotal Based on IP Address"""
+        url = f"{self.base_url}/ip_addresses/{ip_address}"
+        response = requests.get(url, headers=self.headers)
+
+        if response.status_code == 200:
+            return response.json().get("data", {})
+
+        elif self.handle_rate_limit(response):
+            return self.query_ip_address(ip_address)
+
+        else:
+            print(f"Failed to get IP address results: {response.status_code}")
+            print(f"Response body: {response.text}")
+            return None

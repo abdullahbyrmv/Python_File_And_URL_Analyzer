@@ -192,6 +192,40 @@ def scan_by_url(virustotal_api_key):
         print("\nFailed to retrieve URL scan results")
 
 
+def scan_by_ip(virustotal_api_key):
+    """Scan an IP address using VirusTotal"""
+    virus_total = VirusTotal(virustotal_api_key)
+
+    ip_address = input("\nPlease Enter the IP address to analyze: ").strip()
+    if not ip_address:
+        print("\nIP address cannot be empty")
+        return
+
+    print(f"\nQuerying VirusTotal for IP: {ip_address}")
+    ip_data = virus_total.query_ip_address(ip_address)
+
+    if ip_data:
+        attributes = ip_data.get("attributes", {})
+        last_analysis_stats = attributes.get("last_analysis_stats", {})
+        country = attributes.get("country", "Unknown")
+        as_owner = attributes.get("as_owner", "Unknown")
+
+        print("\nIP Address Report:")
+        print(f"IP: {ip_address}")
+        print(f"Country: {country}")
+        print(f"AS Owner: {as_owner}")
+
+        # Display vendor-specific results if available
+        Reporter.display_virustotal_results(ip_data)
+
+        print("\nDetection Summary:")
+        for k, v in last_analysis_stats.items():
+            print(f"{k.capitalize()}: {v}")
+
+    else:
+        print("\nNo scan results found for the provided IP address")
+
+
 # Main Entrypoint of Application
 def main():
     print("\nWelcome to File, Hash and URL Analyzer Application")
@@ -209,10 +243,11 @@ def main():
         print("1. Analyze a file")
         print("2. Analyze a file using the hash")
         print("3. Analyze a URL")
-        print("4. Exit the Application")
+        print("4. Analyze an IP address")
+        print("5. Exit the Application")
 
         # Ask User to Choose an Option
-        choice = input("Please Enter your choice (1/2/3/4): ").strip()
+        choice = input("Please Enter your choice (1/2/3/4/5): ").strip()
 
         # Move to scan_by_file Method if User Selects Option 1
         if choice == "1":
@@ -266,8 +301,11 @@ def main():
         elif choice == "3":
             scan_by_url(virustotal_api_key)
 
-        # Terminate the Execution of Application if User Selects Option 4
         elif choice == "4":
+            scan_by_ip(virustotal_api_key)
+
+        # Terminate the Execution of Application if User Selects Option 4
+        elif choice == "5":
             print("\nTerminating the Application")
             break
         # Inform User to Provide Correct Option
