@@ -158,12 +158,13 @@ def scan_by_hash(virustotal_api_key, file_hash):
 
 
 # Method for Scanning URL
-def scan_by_url(virustotal_api_key):
+def scan_by_url(virustotal_api_key, url_input=None):
     """Scan the URL"""
     virus_total = VirusTotal(virustotal_api_key)
 
     # Ask user to provide URL to analyze
-    url_input = input("\nPlease Enter the URL to analyze: ").strip()
+    if url_input is None:
+        url_input = input("\nPlease Enter the URL to analyze: ").strip()
 
     # Notify User if empty value Entered for URL
     if not url_input:
@@ -192,11 +193,12 @@ def scan_by_url(virustotal_api_key):
         print("\nFailed to retrieve URL scan results")
 
 
-def scan_by_ip(virustotal_api_key):
+def scan_by_ip(virustotal_api_key, ip_address=None):
     """Scan an IP address using VirusTotal"""
     virus_total = VirusTotal(virustotal_api_key)
 
-    ip_address = input("\nPlease Enter the IP address to analyze: ").strip()
+    if ip_address is None:
+        ip_address = input("\nPlease Enter the IP address to analyze: ").strip()
     if not ip_address:
         print("\nIP address cannot be empty")
         return

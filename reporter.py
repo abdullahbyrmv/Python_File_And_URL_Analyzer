@@ -39,7 +39,7 @@ class Reporter:
     # Method for Displaying VirusTotal Scan Results
     def display_virustotal_results(results: dict):
         """Display VirusTotal Vendor Scan Results"""
-        print("\nVirusTotal Vendor Scan Results:")
+        print("\nVirusTotal Scan Results:")
 
         # Retrieve Scan Results
         vendor_scan_results = results.get("attributes", {}).get(
